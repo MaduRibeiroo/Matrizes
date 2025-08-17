@@ -6,11 +6,24 @@ int  main()
 	int mat[MAX][MAX],n,tam;
 	char linha[25];
 	FILE *ptr = fopen("teste.txt", "r");
-	fgets(linha,25,ptr);
+	fgets(linha,100,ptr);
+    linha[strcspn(linha,"\n")] = '\0'; // tira o \n
 	
-	if(strcmp(linha,"MA") == 0) // MA
+	if(strcmp(linha,"MA") == 0) // MATRIZ DE ADJACENCIA
 	{
-		//////////grafo ou diagrafo
+        fgets(linha,100,ptrArq); // lê a linha dos vértices (ex: "A B C D") ----
+        linha[strcspn(linha,"\n")] = '\0';
+        int i=0, j=0;
+        while(linha[i]!='\0'){
+            if(linha[i]!=' ' && linha[i]!='\n' && linha[i]!='\r'){
+                n++;
+                while(linha[i]!=' ' && linha[i]!='\0') // anda até o próximo espaço
+					i++;
+            }else{
+                i++;
+            }
+        }
+		//grafo ou diagrafo
 		int grafo=0; //achei 1, nao achei 0
 		for(int lin=0, col=0;lin<tam && !grafo; lim++)
 		{
