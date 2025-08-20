@@ -2,16 +2,17 @@
 //Gabriel Baldassarini Savoldi RA:102316449
 
 #include <stdio.h>
+#include <string.h>
 #include <math.h>
 #define MAX 10
 
-strcut ListaADJ{
+struct ListaADJ{
 	char origem[2],destino[2];
 	int valor;
 	ListaADJ* prox;
 }
 
-ListaADJ* novaLista(char origem[2],char destino[2],int valor)
+ListaADJ *novaLista(char origem[2],char destino[2],int valor)
 {
 	ListaADJ* nova = new(ListaADJ); 
 	strcpy(nova->origem,origem);
@@ -49,7 +50,7 @@ int  main()
 	if(strcmp(linha,"MA") == 0) // MATRIZ DE ADJACENCIA
 	{
 		fgets(linha, 100, ptr);
-		int tam=0;
+		int tam=0, i=0;
 		while(linha[i]!='\0'){     //A B C D
 			if(linha[i]!='\0' && linha[i]!=' ')
 				tam++;
@@ -101,7 +102,7 @@ int  main()
 		//Regular
 		int grau=0,atual=0,tl=0,regular=0;
 		for(int lin=0; lin < tam  && !regular; lin++ ){
-			atual=0
+			atual=0;
 			for(int col =0;col < tam && !regular ; col++)
 			{
 				if(lin==0)
@@ -183,15 +184,15 @@ int  main()
 
 			*/
 			char aux[3];
+			int i=0,j=0;
 			fgets(linha, 100, ptr);
-			int tamV=0;
+			int tamV=0, tamA=0;
 			while(linha[i]!='\0'){     //A B C D
 				if(linha[i]!='\0' && linha[i]!=' ')
 					tamV++;
 				i++;
 			}
 
-			int i=0,j=0;
 			fgets(linha,100,ptr);
 			while(linha[i]!='\0')
 			{
@@ -402,7 +403,7 @@ int  main()
 				// if(cont!=resp)
 				// 	completo=1;
 
-				if(diagrafo)
+				if(digrafo)
 					printf("\nEssa Lista Adj. e um Digrafo!\n");
 				else
 					printf("\nEssa Lista adj. e um Grafo!\n");
