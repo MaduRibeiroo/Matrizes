@@ -1,3 +1,6 @@
+//Maria Eduarda Ribeiro Nunes RA:102317429
+//Gabriel Baldassarini Savoldi RA:102316449
+
 #include <stdio.h>
 #include <math.h>
 #define MAX 10
@@ -42,24 +45,28 @@ int  main()
 	int mat[MAX][MAX],tam=0;
 	char linha[25];
 	FILE *ptr = fopen("teste.txt", "r");
-	fgets(linha,100,ptr);
-    linha[strcspn(linha,"\n")] = '\0'; // tira o \n
 	
 	if(strcmp(linha,"MA") == 0) // MATRIZ DE ADJACENCIA
 	{
-        fgets(linha,100,ptrArq); // le a linha dos vertices (ex: "A B C D")
-        linha[strcspn(linha,"\n")] = '\0';
-        int i=0, j=0;
-        while(linha[i]!='\0'){
-            if(linha[i]!=' ' && linha[i]!='\n'){
-                tam++;
-                while(linha[i]!=' ' && linha[i]!='\0') // anda ate o proximo espaco
-					i++;
-            }
-			else{
-                i++;
-            }
-        }
+		fgets(linha, 100, ptr);
+		int tam=0;
+		while(linha[i]!='\0'){     //A B C D
+			if(linha[i]!='\0' && linha[i]!=' ')
+				tam++;
+			i++;
+		}
+
+		for (int i = 0; i < tam; i++) {
+			for(int j = 0; j < tam; j++){
+				fgets(linha, 100, ptr);
+				int aux=0;
+				while(linha!='\0' && linha[aux]!=' '){
+					mat[i][j] = linha[aux]-48; 
+					aux++;
+				}
+			}
+		}
+		
 		//grafo ou diagrafo
 		int grafo=0; //achei 1, nao achei 0
 		for(int lin=0, col=0;lin<tam && !grafo; lin++)
@@ -176,29 +183,50 @@ int  main()
 
 			*/
 			char aux[3];
-			char linha[100];
-			fgets(linha,100,ptr);
+			fgets(linha, 100, ptr);
+			int tamV=0;
+			while(linha[i]!='\0'){     //A B C D
+				if(linha[i]!='\0' && linha[i]!=' ')
+					tamV++;
+				i++;
+			}
+
 			int i=0,j=0;
+			fgets(linha,100,ptr);
 			while(linha[i]!='\0')
 			{
-				while(linha!='\0' && linha[i]!=' ') // A,B B,D C,A D,C
-
-				{
+				while(linha[i]!='\0' && linha[i]!=' '){ // A,B B,D C,A D,C
 					aux[j]=linha[i];
 					j++;
 					i++;
 				}
-				if(aux[0] == aux[2])
-					laco = 1;
+				if (j > 0) {
+					tamA++; // conta aresta
+					if (aux[0] == aux[2]) {
+						laco = 1;
+					}
+					j=0;
+				}
+				i++;
+			}
 
+			for (int i = 0; i < tamV; i++) {
+				for(int j = 0; j < tamA; j++){
+					fgets(linha, 100, ptr);
+					int aux=0;
+					while(linha!='\0' && linha[aux]!=' '){
+						mat[i][j] = linha[aux]-48; 
+						aux++;
+					}
+				}
 			}
 
 
 			//grafo ou digrafo
 			int achei=0; //achei 1, nao achei 0
-			for(int lin=0;lin<tam && !achei;lin++)
+			for(int lin=0;lin<tamV && !achei;lin++)
 			{
-				for(int col=0;col<tam && !achei;col++)
+				for(int col=0;col<tamA && !achei;col++)
 				{
 					if(mat[lin][col] < 0)
 						achei = 1;
@@ -216,15 +244,46 @@ int  main()
 			// 	}
 			// }
 
-			
+			//regular
 			// int regular = 0;
-			// for(int lin=0; lin<tam && !regular; lin++){
-			// 	int atual = 0;
-			// 	for(int col=0; col<tam; col++){
+			// for(int lin=0; lin<tamV; lin++){
+			// 	for(int col=0; col<tamA; col++){
 			// 		atual += abs(mat[lin][col]);
 			// 	}
 			// 	if
 			// }
+
+			//regular
+			int neg=0, pos=0, atualN=0, atualP=0;
+			for(int lin=0; lin<tamV; lin++){
+				for(int col=0; col<tamA; col++){
+					if(mat[lin][col]>0)
+						pos++;
+					else
+						if(mat[lin][col]<0)	
+							neg++;
+					if(atualN != 0 || atualP != 0){
+						if(atualN != neg || atualP != pos)	
+							regular = 1;
+					}
+					atualN = neg;
+					atualP = pos;
+					pos = 0;
+					neg = 0;
+				}
+			}
+			
+			
+			//completo
+			int cont=0,completo=0;
+			for(int lin=0, col=0; col < tamA ; col++){
+				if(mat[lin][col]>0)
+					cont++;
+			}
+			int resp = tamA*(tamA-1) /2;
+
+			if(cont!=resp)
+				completo=1;
 			
 
 			if(achei)
@@ -232,9 +291,17 @@ int  main()
 			else
 				printf("\nEsta matriz e um grafo!\n");
 			if(laco)
-				printf("\nEsta matriz nao e um simples!\n");
+				printf("\nEsta matriz nao e simples!\n");
 			else
-				printf("\nEsta matriz e um grafo!\n");
+				printf("\nEsta matriz e simples!\n");
+			if(completo)
+				printf("\nEsta matriz nao e completa!\n");
+			else
+				printf("\nEsta matriz e completa!\n");
+			if(regular)
+				printf("\nEsta matriz nao e regular!\n");
+			else
+				printf("\nEsta matriz e regular!\n");
 			
 		}
 		else
@@ -242,21 +309,107 @@ int  main()
 			if(strcmp(linha),"LA" == 0){
 				char linha[100];
 				int valor;
+				char origem[2],destino[2];
 				ListaADJ* L=NULL;
+				fscanf(ptr,"%[^,],%[^\n]\n",&linha,&valor);
 				while(!feof(ptr)){
-					fscanf(ptr,"%[^,],%[^\n]\n",&linha,&valor);
-					char origem[2],destino[2];
 					origem[0]=linha[0];
 					origem[1]='\0';
-
 					destino[0]=linha[2];
 					destino[1]='\0';
-					
 					inserirFinalLista(L,origem,destino,valor);
-
-					
+					fscanf(ptr,"%[^,],%[^\n]\n",&linha,&valor);
+				}
+				ListaADJ *aux,*atual;
+				atual=L;
+				char digrafo=0;
+				while( atual!= NULL && !digrafo) //digrafo
+				{
+					digrafo=1;
+					aux=atual->prox;
+					while(aux!=NULL && simples)
+					{
+						if(strcmp(atual->origem,aux->destino) == 0 && strcmp(atual->destino,aux->origem) == 0)
+							digrafo=0;
+					}
+					atual=atual->prox;
 				}
 				
+
+
+				atual=L;
+				char simples=0;
+				while( atual!= NULL && !simples) // verifica se tem laco O(n)
+				{
+					if(strcmp(atual->origem,atual->destino) == 0 )
+						simples=1;	
+					atual=atual->prox;
+				}
+
+				atual=L;
+				simples=0;
+				while( atual!= NULL && !simples)// verifica multi aresta O(n^2)
+				{
+					simples=1;
+					aux=atual;
+					while(aux!=NULL && simples)
+					{
+						if(strcmp(atual->origem,aux->origem) == 0 && strcmp(atual->destino,aux->destino) == 0)
+							simples=0;
+					}
+					atual=atual->prox;
+				}
+				
+				atual=L;
+				char regular=0;
+				int pos=0,antP=0,neg=0,antN=0;
+				while( atual!= NULL && !regular)// verifica regular O(n^2)
+				{
+					regular=1;
+					aux=atual;
+					while(aux!=NULL && regular)
+					{
+						if(strcmp(atual->origem,aux->origem) == 0)
+						{
+							pos++;
+						}
+						else if(strcmp(atual->destino,aux->destino) == 0 )
+						{
+							neg++;
+						}
+					}
+					if(antP == 0 && antN==0){
+						antP=pos;
+						antN=neg;
+					}
+					else
+						if(antN!=neg && antP!=pos)
+							regular=1;
+					pos=0;
+					neg=0;
+					atual=atual->prox;
+				}
+
+				//completo
+				// int cont=0,completo=0;
+				// for(int lin=0,col=0; col < tam ;col++)
+				// {
+				// 	if(mat[lin][col]!=0)
+				// 		cont++;
+				// }
+				// int resp = tam*(tam-1) /2;
+
+				// if(cont!=resp)
+				// 	completo=1;
+
+				if(diagrafo)
+					printf("\nEssa Lista Adj. e um Digrafo!\n");
+				else
+					printf("\nEssa Lista adj. e um Grafo!\n");
+				if(simples)
+					printf("\nEssa Lista Adj. e Simples!\n");
+				else
+					printf("\nEssa Lista adj. nao e simples!\n");
 			}
 			else{
 				printf("\nErro ao ler arquivo, nome de matriz ou lista, invalido!\n");
