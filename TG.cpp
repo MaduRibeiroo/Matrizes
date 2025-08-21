@@ -44,7 +44,7 @@ void inserirFinalLista(ListaADJ **L, char origem[2], char destino[2], int valor)
 int main()
 {
     int mat[MAX][MAX], tam = 0;
-    char linha[25];
+    char linha[100];
     FILE *ptr = fopen("teste.txt", "r");
 
     if (strcmp(linha, "MA") == 0) // MATRIZ DE ADJACENCIA
