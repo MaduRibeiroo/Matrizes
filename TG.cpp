@@ -185,7 +185,7 @@ int main()
 	        	resp = tam * (tam - 1);
 	        else
 	        	resp = tam * (tam - 1)/2;
-			printf("cont %d\nresp: %d\n",cont,resp);
+			
 	        if (cont >= resp)
 	            completo = 1;	
         }
@@ -253,37 +253,28 @@ int main()
             
             
             fscanf(ptr,"%[^\n]\n",&linha);
-            printf("linha : %s\n",linha);
             char laco=0;
             i=0;
             int j = 0;
             while (linha[i] != '\0')
             {
-            	printf("b\n");
                 while (linha[i] != '\0' && linha[i] != ' ')
                 { // A,B B,D C,A D,C
                     aux[j] = linha[i];
-                    printf("Entrou\n");
-                    printf("i%d j%d\n", i,j);
-                    printf("linha:%c\n",linha[i]);
-                    printf("aux:%c\n",aux[j]);
                     j++;
                     i++;
-                    
                 }
                 if (j > 0)
                 {
-                	printf("a\n");
                     tamA++; // conta aresta
                     if (aux[0] == aux[2]){
                         laco = 1;
                     }
                     j = 0;
                 }
-                i++;
+                if(linha[i]!='\0')
+                    i++;
             }
-            printf("tamanho linha %d\n", strlen(linha));
-            printf("%d\n", tamA);
             
 			int jogo=0;
             for (int i = 0; i < tamV; i++)
@@ -309,13 +300,13 @@ int main()
 
 
             // grafo ou digrafo
-            int achei = 0; // achei 1, nao achei 0
-            for (int lin = 0; lin < tamV && !achei; lin++)
+            int grafo = 0; // grafo 1, nao grafo 0
+            for (int lin = 0; lin < tamV && !grafo; lin++)
             {
-                for (int col = 0; col < tamA && !achei; col++)
+                for (int col = 0; col < tamA && !grafo; col++)
                 {
                     if (mat[lin][col] < 0)
-                        achei = 1;
+                        grafo = 1;
                 }
             }
 
@@ -348,36 +339,55 @@ int main()
                         pos++;
                     else if (mat[lin][col] < 0)
                         neg++;
-                    if (atualN != 0 || atualP != 0)
-                    {
-                    	if (atualN != neg)
-                    		regEmi=1;
-                    	if(atualP != pos)
-                    		regRec=1;
-                    }
-                    atualN = neg;
-                    atualP = pos;
-                    pos = 0;
-                    neg = 0;
                 }
+                if (atualN != 0 || atualP != 0)
+                {
+                    if (atualN != neg)
+                        regEmi=1;
+                    if(atualP != pos)
+                        regRec=1;
+                }
+                atualN = neg;
+                atualP = pos;
+                pos = 0;
+                neg = 0;
             }
-            
             
             
 
             // completo
-            int cont = 0, completo = 0;
-            for (int lin = 0, col = 0; col < tamA; col++)
+            int completo=0;
+            if(!laco)
             {
-                if (mat[lin][col] > 0)
-                    cont++;
+                int cont = 0;
+                for (int lin = 0, col = 0; lin < tamV; lin++)
+                {
+                    for(int col=0;col<tamA;col++)
+                    {
+                        if (mat[lin][col] > 0 || mat[lin][col] < 0)
+                            cont++;
+                    }
+                }
+                int resp=0;
+                if( ! grafo)
+                    resp = tamV * (tamV - 1);
+                else
+                {
+                    resp = tamV * (tamV - 1);
+                }
+                if (cont != resp)
+                    completo = 1;
             }
-            int resp = tamA * (tamA - 1) / 2;
+            else
+            {
+                completo=1;
+            }
+           
+            
 
-            if (cont != resp)
-                completo = 1;
 
-            if (achei)
+
+            if (grafo)
                 printf("\nEsta Matriz de Incidencia e um Digrafo!\n");
             else
                 printf("\nEsta Matriz de Incidencia e um Grafo!\n");

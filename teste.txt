@@ -41,10 +41,34 @@ A,B B,D C,A D,C
 0 0 -1 1
 0 1 0 -1
 
+MI
+A B C
+A,B B,C A,A
+-1 0 -1 
+1 -1 0  
+0 1 0
 
+MI
+A B C D
+A,B A,C A,D B,C B,D C,D
+1 1 1 0 0 0
+1 0 0 1 1 0
+0 0 1 1 0 1
+0 1 0 0 1 1
 
+MI
+A B C
+A,B A,C B,C
+-1 -1 0
+1 0 -1
+0 1 1
 
-
+MI
+A B C
+A,B A,C B,C
+-1 1 0
+1 0 -1
+0 -1 1
 
 LA
 A B,15
