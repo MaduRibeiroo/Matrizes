@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#include<conio2.h>
+#include <conio2.h>
 #define MAX 10
 
 struct ListaADJ
@@ -45,7 +45,7 @@ void inserirFinalLista(ListaADJ **L, char origem[2], char destino[2], int valor)
 int main()
 {
     int mat[MAX][MAX], tam = 0;
-    char linha[20];
+    char linha[100];
     FILE *ptr = fopen("Entrada.txt", "r");
  	fscanf(ptr,"%[^\n]\n",&linha);
     if (strcmp(linha, "MA") == 0) // MATRIZ DE ADJACENCIA
@@ -240,7 +240,7 @@ int main()
 
             */
             char aux[3];
-            int i = 0, j = 0;
+            int i = 0;
             fscanf(ptr,"%[^\n]\n",&linha);
             int tamV = 0, tamA = 0;
             while (linha[i] != '\0')
@@ -255,27 +255,35 @@ int main()
             fscanf(ptr,"%[^\n]\n",&linha);
             printf("linha : %s\n",linha);
             char laco=0;
+            i=0;
+            int j = 0;
             while (linha[i] != '\0')
             {
             	printf("b\n");
                 while (linha[i] != '\0' && linha[i] != ' ')
                 { // A,B B,D C,A D,C
                     aux[j] = linha[i];
+                    printf("Entrou\n");
+                    printf("i%d j%d\n", i,j);
+                    printf("linha:%c\n",linha[i]);
+                    printf("aux:%c\n",aux[j]);
                     j++;
                     i++;
+                    
                 }
                 if (j > 0)
                 {
                 	printf("a\n");
                     tamA++; // conta aresta
-                    if (aux[0] == aux[2])
-                    {
+                    if (aux[0] == aux[2]){
                         laco = 1;
                     }
                     j = 0;
                 }
                 i++;
             }
+            printf("tamanho linha %d\n", strlen(linha));
+            printf("%d\n", tamA);
             
 			int jogo=0;
             for (int i = 0; i < tamV; i++)
