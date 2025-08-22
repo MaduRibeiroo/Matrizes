@@ -5,6 +5,15 @@ A B C D
 15 0 0 0
 0 0 15 0
 
+
+MA
+A B C
+0 1 1
+1 0 1
+1 1 0
+
+
+
 MI
 A B C D
 A,B B,D C,A D,C
@@ -14,8 +23,45 @@ A,B B,D C,A D,C
 0 0 -15 15
 0 15 0 -15
 
+
+MI
+A B C D
+A,B A,C B,D D,C
+1 1 0 0
+1 0 1 0
+0 1 0 1
+0 0 1 1
+
+
+MI
+A B C D
+A,B B,D C,A D,C
+-1 0 1 0
+1 -1 0 0
+0 0 -1 1
+0 1 0 -1
+
+
+
+
+
+
 LA
 A B,15
 B D,15
 C A,15
-D C,15
+
+
+LA 
+A B,0
+B A,0
+B D,0
+D B,0
+D C,0
+C D,0
+C A,0
+A C,0
+C B,0
+B C,0
+A D,0
+D A,0
